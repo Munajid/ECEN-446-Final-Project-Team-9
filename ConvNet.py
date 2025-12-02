@@ -78,7 +78,7 @@ class ConvNet:
             model_id_str = model_id_str[1:(len(model_id_str)-1)]
             model_folder = format("%snetid%d_model%s" % (self.net_config.model_folder, self.net_id, model_id_str))
             restore_model_name = format("%s/model.ckpt" % model_folder)
-            saver_restore = tf.train.Saver(save_dict)
+            saver_restore = tf.compat.v1.train.Saver(save_dict)
             saver_restore.restore(sess_in, restore_model_name)
             print("Restore the first %d layers.\n" % restore_layers_in)
 
@@ -103,7 +103,7 @@ class ConvNet:
         if not os.path.exists(save_model_folder):
             os.makedirs(save_model_folder)
         save_model_name = format("%s/model.ckpt" % (save_model_folder))
-        saver_save = tf.train.Saver(save_dict)
+        saver_save = tf.compat.v1.train.Saver(save_dict)
         saver_save.save(sess_in, save_model_name)
         print("Save %d layers.\n" % self.net_config.save_layers)
 

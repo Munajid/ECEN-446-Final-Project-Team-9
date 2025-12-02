@@ -14,7 +14,7 @@ class TopConfig:
 
         # noise information
         self.blk_len = self.N_code
-        self.corr_para = 0.5  # correlation parameters of the colored noise
+        self.corr_para = 0.8  # correlation parameters of the colored noise
         self.corr_para_simu = self.corr_para  # correlation parameters for simulation. this should be equal to corr_para. If not, it is used to test the model robustness.
         self.cov_1_2_file = format('./Noise/cov_1_2_corr_para%.2f.dat'% self.corr_para)
         self.cov_1_2_file_simu = self.cov_1_2_file
@@ -148,10 +148,11 @@ class TrainingConfig:
         self.currently_trained_net_id = top_config.currently_trained_net_id
 
         # training data information
-        self.training_sample_num = 1999200    # the number of training samples. It should be a multiple of training_minibatch_size
+        self.training_sample_num =  1999200 # og 1999200  # the number of training samples. It should be a multiple of training_minibatch_size
         # training parameters
         self.epoch_num = 200000  # the number of training iterations.
-        self.training_minibatch_size = 1400  # one mini-batch contains equal amount of data generated under different CSNR.
+        # FIXME: batch size too large? og 1400
+        self.training_minibatch_size = 350  # one mini-batch contains equal amount of data generated under different CSNR.
         self.SNR_set_gen_data = top_config.SNR_set_gen_data
         # the data in the feature file is the network input.
         # the data in the label file is the ground truth.

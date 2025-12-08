@@ -26,7 +26,8 @@ class TopConfig:
 
         # Noise information
         self.blk_len = self.N_code
-        self.corr_para = 0.5  # correlation parameter
+        self.corr_para = 0.3  # correlation parameter
+        # self.corr_para = 0.8  # correlation parameter 
         self.corr_para_simu = self.corr_para
         self.cov_1_2_file = "./Noise/cov_1_2_corr_para%.2f.dat" % self.corr_para
         self.cov_1_2_file_simu = self.cov_1_2_file
@@ -230,8 +231,14 @@ class TrainingConfig:
         self.corr_para = top_config.corr_para
         self.currently_trained_net_id = top_config.currently_trained_net_id
 
+        # how many epochs to train the CNN
+        # self.epoch_num = 10000
+        self.epoch_num = 2000
+
+
         # training data info
-        self.training_sample_num = 1999200
+        # self.training_sample_num = 1999200
+        self.training_sample_num = 14000      # instead of ~2e6
         self.training_minibatch_size = 1400
         self.SNR_set_gen_data = top_config.SNR_set_gen_data
 
@@ -241,7 +248,8 @@ class TrainingConfig:
         self.training_label_file = "./TrainingData/RealNoise.dat"
 
         # test data info
-        self.test_sample_num = 105000
+        # self.test_sample_num = 105000
+        self.test_sample_num = 7000           # instead of 105000
         self.test_minibatch_size = 3500
         self.test_feature_file = "./TestData/EstNoise_before_cnn%d.dat" % (
             self.currently_trained_net_id

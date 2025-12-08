@@ -146,8 +146,25 @@ def simulation_colored_noise(linear_code, top_config, net_config, simutimes_rang
             if ik == max_batches - 1 and residual_times != 0:
                 real_batch_size = residual_times
             x_bits, _, s_mod, ch_noise, y_receive, LLR = lbc.encode_and_transmission(G_matrix, SNR, real_batch_size, noise_io, rng)
+            print("Batch {}: mean(ch_noise^2) = {:.4e}, mean((y-s)^2) = {:.4e}".format(
+                ik, np.mean(ch_noise**2), np.mean((y_receive - s_mod)**2)
+            ))
+            print("Batch {}: first 5 ch_noise vals: {}".format(
+                ik, ch_noise.flatten()[:5]
+            ))
             noise_power = np.mean(np.square(ch_noise))
+            # Recompute noise from y - s_mod as an independent check
+            noise_from_y = y_receive - s_mod
+            noise_power_alt = np.mean(np.square(noise_from_y))
+        
+            print("Noise power (ch_noise) =", noise_power)
+            print("Noise power (y - s_mod) =", noise_power_alt)
+        
+            if noise_power_alt == 0:
+                print("WARNING: y_receive == s_mod, channel noise is literally zero for this batch.")
+
             practical_snr = 10*np.log10(1 / (noise_power * 2.0))
+            print("Noise power =", noise_power)
             print('Practical EbN0: %.2f' % practical_snr)
 
             for iter in range(0, denoising_net_num+1):

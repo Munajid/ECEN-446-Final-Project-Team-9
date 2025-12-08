@@ -4,7 +4,7 @@ import numpy as np
 class TopConfig:
     def __init__(self):
         # select functions to be executed, including generating data(GenData), training(Train), and simulation(Simulation)
-        self.function = 'Train'
+        self.function = 'Simulation'
 
         # code
         self.N_code = 576
@@ -14,7 +14,7 @@ class TopConfig:
 
         # noise information
         self.blk_len = self.N_code
-        self.corr_para = 0.8  # correlation parameters of the colored noise
+        self.corr_para = 0.3  # correlation parameters of the colored noise
         self.corr_para_simu = self.corr_para  # correlation parameters for simulation. this should be equal to corr_para. If not, it is used to test the model robustness.
         self.cov_1_2_file = format('./Noise/cov_1_2_corr_para%.2f.dat'% self.corr_para)
         self.cov_1_2_file_simu = self.cov_1_2_file

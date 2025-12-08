@@ -20,7 +20,7 @@ plt.semilogy(snr, ber, 'o-', label='BER')
 plt.semilogy(snr, bler, 's-', label='BLER')
 plt.xlabel('SNR (dB)')
 plt.ylabel('Error Rate')
-plt.title('BER/BLER vs SNR (corr_para=0.8)')
+plt.title('BER/BLER vs SNR (corr_para=0.0)')
 plt.legend()
 plt.grid(True)
 

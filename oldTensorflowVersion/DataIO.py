@@ -79,48 +79,61 @@ class TestDataIO:
         return features, labels
 
 
-class NoiseIO:
+class NoiseIO(object):
     def __init__(self, blk_len, read_from_file, noise_file, cov_1_2_mat_file_gen_noise, rng_seed=None):
         self.read_from_file = read_from_file
         self.blk_len = blk_len
         self.rng_seed = rng_seed
+
         if read_from_file:
+            # Same as before: read noise directly from a file
             self.fin_noise = open(noise_file, 'rb')
+            self.rng = None
+            self.cov_1_2_mat = None
         else:
+            # Use NumPy RNG instead of TF
             self.rng = np.random.RandomState(rng_seed)
+
+            # Load the covariance-shaping matrix from the .dat file
             fin_cov_file = open(cov_1_2_mat_file_gen_noise, 'rb')
-            cov_1_2_mat = np.fromfile(fin_cov_file, np.float32, blk_len*blk_len)
+            cov_1_2_mat = np.fromfile(fin_cov_file, np.float32, blk_len * blk_len)
             cov_1_2_mat = np.reshape(cov_1_2_mat, [blk_len, blk_len])
             fin_cov_file.close()
-            ## output parts of the correlation function for check
+
+            # Store it on self so we can use it later
+            self.cov_1_2_mat = cov_1_2_mat
+
+            # Output parts of the correlation function for sanity check
             cov_func = np.matmul(cov_1_2_mat, cov_1_2_mat)
             print('Correlation function of channel noise: ')
-            print(cov_func[0,0:10])
-            self.awgn_noise = tf.placeholder(dtype=tf.float32, shape=[None, blk_len])
-            self.noise_tf = tf.matmul(self.awgn_noise, cov_1_2_mat)
-            self.sess = tf.Session()
-
+            print(cov_func[0, 0:10])
 
     def __del__(self):
         if self.read_from_file:
-            self.fin_noise.close()
-        else:
-            self.sess.close()
+            try:
+                self.fin_noise.close()
+            except:
+                pass
+        # No TF session anymore, so nothing else to close
 
-    def reset_noise_generator(self): # this function resets the file pointer or the rng generator to generate the same noise data
+    def reset_noise_generator(self):  # reset file pointer or RNG
         if self.read_from_file:
             self.fin_noise.seek(0, 0)
         else:
+            # Reset RNG to original seed so noise is reproducible
             self.rng = np.random.RandomState(self.rng_seed)
-
 
     def generate_noise(self, batch_size):
         if self.read_from_file:
+            # Same as before: read pre-generated noise from file
             noise = np.fromfile(self.fin_noise, np.float32, batch_size * self.blk_len)
             noise = np.reshape(noise, [batch_size, self.blk_len])
         else:
-            noise_awgn = self.rng.randn(batch_size, self.blk_len)
-            noise_awgn = noise_awgn.astype(np.float32)
-            noise = self.sess.run(self.noise_tf, feed_dict={self.awgn_noise: noise_awgn})
+            # AWGN with unit variance
+            noise_awgn = self.rng.randn(batch_size, self.blk_len).astype(np.float32)
 
+            # Shape the noise using the covariance matrix from MATLAB
+            # (equivalent to your old tf.matmul(self.awgn_noise, cov_1_2_mat))
+            noise = np.matmul(noise_awgn, self.cov_1_2_mat).astype(np.float32)
+            
         return noise

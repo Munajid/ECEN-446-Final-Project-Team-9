@@ -1,0 +1,10 @@
+Test loss: 0.914981
+Start training...
+Epoch 500, train loss: 0.143295
+Test loss: 0.145840
+Epoch 1000, train loss: 0.132072
+Test loss: 0.139012
+Epoch 1500, train loss: 0.124809
+Test loss: 0.137610
+Epoch 2000, train loss: 0.120502
+Test loss: 0.135623

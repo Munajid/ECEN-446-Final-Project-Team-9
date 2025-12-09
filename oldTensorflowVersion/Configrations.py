@@ -148,11 +148,11 @@ class TrainingConfig:
         self.currently_trained_net_id = top_config.currently_trained_net_id
 
         # training data information
-        self.training_sample_num =  1999200 # og 1999200  # the number of training samples. It should be a multiple of training_minibatch_size
+        self.training_sample_num =  7000 # og 1999200  # the number of training samples. It should be a multiple of training_minibatch_size
         # training parameters
-        self.epoch_num = 200000  # the number of training iterations.
+        self.epoch_num = 800  # the number of training iterations.
         # FIXME: batch size too large? og 1400
-        self.training_minibatch_size = 350  # one mini-batch contains equal amount of data generated under different CSNR.
+        self.training_minibatch_size = 700  # one mini-batch contains equal amount of data generated under different CSNR.
         self.SNR_set_gen_data = top_config.SNR_set_gen_data
         # the data in the feature file is the network input.
         # the data in the label file is the ground truth.
@@ -160,7 +160,7 @@ class TrainingConfig:
         self.training_label_file = "./TrainingData/RealNoise.dat"
 
         # test data information
-        self.test_sample_num = 105000 # it should be a multiple of test_minibatch_size
+        self.test_sample_num = 3500 # it should be a multiple of test_minibatch_size
         self.test_minibatch_size = 3500
         self.test_feature_file = format("./TestData/EstNoise_before_cnn%d.dat" % (self.currently_trained_net_id))
         self.test_label_file = "./TestData/RealNoise.dat"

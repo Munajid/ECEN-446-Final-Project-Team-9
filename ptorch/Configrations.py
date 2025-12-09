@@ -231,15 +231,20 @@ class TrainingConfig:
         self.corr_para = top_config.corr_para
         self.currently_trained_net_id = top_config.currently_trained_net_id
 
+        # uncommented are a good medium between cpu and gpu quick tests
+
         # how many epochs to train the CNN
         # self.epoch_num = 10000
-        self.epoch_num = 2000
+        # self.epoch_num = 2000
+        self.epoch_num = 800
 
 
         # training data info
         # self.training_sample_num = 1999200
-        self.training_sample_num = 14000      # instead of ~2e6
-        self.training_minibatch_size = 1400
+        # self.training_sample_num = 14000      # instead of ~2e6
+        self.training_sample_num = 7000
+        # self.training_minibatch_size = 1400
+        self.training_minibatch_size = 700
         self.SNR_set_gen_data = top_config.SNR_set_gen_data
 
         self.training_feature_file = "./TrainingData/EstNoise_before_cnn%d.dat" % (
@@ -249,7 +254,8 @@ class TrainingConfig:
 
         # test data info
         # self.test_sample_num = 105000
-        self.test_sample_num = 7000           # instead of 105000
+        # self.test_sample_num = 7000           # instead of 105000
+        self.test_sample_num = 3500
         self.test_minibatch_size = 3500
         self.test_feature_file = "./TestData/EstNoise_before_cnn%d.dat" % (
             self.currently_trained_net_id
